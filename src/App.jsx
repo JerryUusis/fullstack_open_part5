@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import Blog from "./components/Blog";
+import Blogs from "./components/Blogs";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import Login from "./components/Login";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -11,6 +12,8 @@ const App = () => {
   const [url, setUrl] = useState("");
   const [author, setAuthor] = useState("");
   const [title, setTitle] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [severity, setSeverity] = useState();
 
   // Fetch blogs and save in the blogs state
   useEffect(() => {
@@ -35,6 +38,12 @@ const App = () => {
     }
   }, []);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, 3000);
+  }, [errorMessage]);
+
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
@@ -45,8 +54,14 @@ const App = () => {
       setUsername("");
       setPassword("");
     } catch (error) {
+      handleNotification("Login failed", "error");
       console.error(error);
     }
+  };
+
+  const handleNotification = (message, severity) => {
+    setErrorMessage(message);
+    setSeverity(severity);
   };
 
   const handleNewBlog = async (event) => {
@@ -54,8 +69,13 @@ const App = () => {
     try {
       const newBlog = { title, author, url };
       await blogService.create(newBlog);
+      handleNotification(`a new blog ${title} added succesfully`, "success");
+      setTitle("");
+      setAuthor("");
+      setUrl("");
     } catch (error) {
       console.error(error);
+      handleNotification("Adding new blog failed", "error");
     }
   };
 
@@ -66,75 +86,36 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div>
-        <h2>Log in to application</h2>
-        <form onSubmit={handleLogin}>
-          <div>
-            Username
-            <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            Password
-            <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
-            />
-            <button type="submit">Submit</button>
-          </div>
-        </form>
-      </div>
+      <>
+        <Login
+          handleLogin={handleLogin}
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+          errorMessage={errorMessage}
+          severity={severity}
+        />
+      </>
     );
   }
 
   if (user) {
     return (
-      <div>
-        <h2>blogs</h2>
-        <div>
-          {user.username} logged in
-          <button onClick={() => handleLogout()}>Logout</button>
-        </div>
-        <form onSubmit={handleNewBlog}>
-          <div>
-            title:
-            <input
-              type="text"
-              name="Title"
-              value={title}
-              onChange={({ target }) => setTitle(target.value)}
-            />
-          </div>
-          <div>
-            author:
-            <input
-              type="text"
-              name="Author"
-              value={author}
-              onChange={({ target }) => setAuthor(target.value)}
-            />
-          </div>
-          <div>
-            url:
-            <input
-              type="text"
-              name="url"
-              value={url}
-              onChange={({ target }) => setUrl(target.value)}
-            />
-          </div>
-          <button>create</button>
-        </form>
-        {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
-        ))}
-      </div>
+      <Blogs
+        user={user}
+        title={title}
+        setTitle={setTitle}
+        author={author}
+        setAuthor={setAuthor}
+        url={url}
+        setUrl={setUrl}
+        handleNewBlog={handleNewBlog}
+        errorMessage={errorMessage}
+        severity={severity}
+        blogs={blogs}
+        handleLogout={handleLogout}
+      />
     );
   }
 };

@@ -4,3 +4,4 @@
 - 5.1: blogilistan frontend, step1 ✅
 - 5.2: blogilistan frontend, step2 ✅
 - 5.3: blogilistan frontend, step3 ✅
+- 5.4: blogilistan frontend, step4 ✅
