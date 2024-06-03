@@ -16,17 +16,18 @@ const App = () => {
   const [severity, setSeverity] = useState();
 
   // Fetch blogs and save in the blogs state
+  const fetchData = async () => {
+    const request = await blogService.getAll();
+    setBlogs(request);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const request = await blogService.getAll();
-      setBlogs(request);
-    };
     try {
       fetchData();
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [blogs]);
 
   // Check if user state can be found from local storage
   useEffect(() => {
