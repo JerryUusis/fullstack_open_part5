@@ -11,7 +11,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [severity, setSeverity] = useState();
+  const [severity, setSeverity] = useState("");
 
   const blogFormRef = useRef();
 

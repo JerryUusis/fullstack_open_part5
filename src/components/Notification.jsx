@@ -1,4 +1,15 @@
+import PropTypes from "prop-types";
+
 const Notification = ({ errorMessage, severity }) => {
+
+  Notification.propTypes = {
+    errorMessage: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.oneOf([null])
+    ]),
+    severity: PropTypes.string.isRequired
+  };
+
   if (errorMessage === null) {
     return null;
   }

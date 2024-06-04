@@ -2,6 +2,7 @@ import { useState } from "react";
 import Togglable from "./Togglable";
 import { useRef } from "react";
 import blogService from "../services/blogs";
+import PropTypes from "prop-types";
 
 const Blog = ({ blog, handleDelete, currentUser }) => {
   const [blogLikes, setBlogLikes] = useState(blog.likes);
@@ -12,6 +13,12 @@ const Blog = ({ blog, handleDelete, currentUser }) => {
     border: "solid",
     borderWidth: 1,
     marginBottom: 5,
+  };
+
+  Blog.propTypes = {
+    blog: PropTypes.object.isRequired,
+    handleDelete: PropTypes.func.isRequired,
+    currentUser: PropTypes.string.isRequired
   };
 
   const handleUpdate = async () => {
