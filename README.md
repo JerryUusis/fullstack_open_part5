@@ -11,3 +11,4 @@
 - 5.6 blogilistan frontend, step6 ✅
 - 5.7 blogilistan frontend, step7 ✅
 - 5.8 blogilistan frontend, step8 ✅
+- 5.9* blogilistan frontend, step9 ✅
