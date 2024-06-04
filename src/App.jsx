@@ -12,9 +12,6 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [url, setUrl] = useState("");
-  const [author, setAuthor] = useState("");
-  const [title, setTitle] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [severity, setSeverity] = useState();
 
@@ -70,16 +67,12 @@ const App = () => {
     setSeverity(severity);
   };
 
-  const handleNewBlog = async (event) => {
-    event.preventDefault();
+  const handleNewBlog = async (title, author, url) => {
     try {
       blogFormRef.current.toggleVisibility();
       const newBlog = { title, author, url };
       await blogService.create(newBlog);
       handleNotification(`a new blog ${title} added succesfully`, "success");
-      setTitle("");
-      setAuthor("");
-      setUrl("");
       setBlogs(blogs.concat(newBlog));
     } catch (error) {
       console.error(error);
@@ -120,15 +113,7 @@ const App = () => {
           <button onClick={() => handleLogout()}>Logout</button>
         </div>
         <Togglable buttonLabel="new note" ref={blogFormRef}>
-          <BlogForm
-            title={title}
-            handleTitleChange={({ target }) => setTitle(target.value)}
-            author={author}
-            handleAuthorChange={({ target }) => setAuthor(target.value)}
-            url={url}
-            handleUrlChange={({ target }) => setUrl(target.value)}
-            handleNewBlog={handleNewBlog}
-          />
+          <BlogForm handleNewBlog={handleNewBlog} />
         </Togglable>
         <div>
           {blogs.map((blog) => (
