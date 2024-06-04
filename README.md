@@ -9,3 +9,4 @@
 ## [Exercises 5.5-5.11](https://fullstackopen.com/osa5/props_children_ja_proptypet#tehtavat-5-5-5-11)
 - 5.5 blogilistan frontend, step5 ✅
 - 5.6 blogilistan frontend, step6 ✅
+- 5.7 blogilistan frontend, step7 ✅
