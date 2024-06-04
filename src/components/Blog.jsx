@@ -16,16 +16,17 @@ const Blog = ({ blog }) => {
 
   const handleUpdate = async () => {
     try {
+      const newLikes = blogLikes + 1;
       const updatedBlog = {
         id: blog.id,
         user: blog.user.id,
-        likes: blog.likes + 1,
+        likes: newLikes,
         author: blog.author,
         title: blog.title,
         url: blog.url,
       };
       await blogService.update(updatedBlog);
-      setBlogLikes(updatedBlog.likes);
+      setBlogLikes(newLikes);
     } catch (error) {
       console.error(error);
     }
