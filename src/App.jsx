@@ -18,6 +18,8 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [severity, setSeverity] = useState();
 
+  const blogFormRef = useRef();
+
   // Fetch blogs and save in the blogs state
   const fetchData = async () => {
     const request = await blogService.getAll();
@@ -71,6 +73,7 @@ const App = () => {
   const handleNewBlog = async (event) => {
     event.preventDefault();
     try {
+      blogFormRef.current.toggleVisibility();
       const newBlog = { title, author, url };
       await blogService.create(newBlog);
       handleNotification(`a new blog ${title} added succesfully`, "success");
@@ -116,7 +119,7 @@ const App = () => {
           {user.username} logged in
           <button onClick={() => handleLogout()}>Logout</button>
         </div>
-        <Togglable buttonLabel="new note">
+        <Togglable buttonLabel="new note" ref={blogFormRef}>
           <BlogForm
             title={title}
             handleTitleChange={({ target }) => setTitle(target.value)}
