@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import Blogs from "./components/Blogs";
+import BlogForm from "./components/BlogForm";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
-import Login from "./components/Login";
+import Login from "./components/LoginForm";
+import Blog from "./components/Blog";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -27,7 +29,7 @@ const App = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [blogs]);
+  }, []);
 
   // Check if user state can be found from local storage
   useEffect(() => {
@@ -74,6 +76,7 @@ const App = () => {
       setTitle("");
       setAuthor("");
       setUrl("");
+      setBlogs(blogs.concat(newBlog));
     } catch (error) {
       console.error(error);
       handleNotification("Adding new blog failed", "error");
@@ -88,14 +91,14 @@ const App = () => {
   if (user === null) {
     return (
       <>
+        <h2>Log in to application</h2>
+        <Notification errorMessage={errorMessage} severity={severity} />
         <Login
-          handleLogin={handleLogin}
           username={username}
-          setUsername={setUsername}
           password={password}
-          setPassword={setPassword}
-          errorMessage={errorMessage}
-          severity={severity}
+          handleLogin={handleLogin}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
         />
       </>
     );
@@ -103,20 +106,32 @@ const App = () => {
 
   if (user) {
     return (
-      <Blogs
-        user={user}
-        title={title}
-        setTitle={setTitle}
-        author={author}
-        setAuthor={setAuthor}
-        url={url}
-        setUrl={setUrl}
-        handleNewBlog={handleNewBlog}
-        errorMessage={errorMessage}
-        severity={severity}
-        blogs={blogs}
-        handleLogout={handleLogout}
-      />
+      <div>
+        <div>
+          <h2>blogs</h2>
+          <Notification errorMessage={errorMessage} severity={severity} />
+        </div>
+        <div>
+          {user.username} logged in
+          <button onClick={() => handleLogout()}>Logout</button>
+        </div>
+
+        <BlogForm
+          title={title}
+          handleTitleChange={({ target }) => setTitle(target.value)}
+          author={author}
+          handleAuthorChange={({ target }) => setAuthor(target.value)}
+          url={url}
+          handleUrlChange={({ target }) => setUrl(target.value)}
+          handleNewBlog={handleNewBlog}
+          blogs={blogs}
+        />
+        <div>
+          {blogs.map((blog) => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
+        </div>
+      </div>
     );
   }
 };

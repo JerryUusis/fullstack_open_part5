@@ -5,3 +5,6 @@
 - 5.2: blogilistan frontend, step2 ✅
 - 5.3: blogilistan frontend, step3 ✅
 - 5.4: blogilistan frontend, step4 ✅
+
+## [Exercises 5.5-5.11](https://fullstackopen.com/osa5/props_children_ja_proptypet#tehtavat-5-5-5-11)
+- 5.5 blogilistan frontend, step5 ✅
