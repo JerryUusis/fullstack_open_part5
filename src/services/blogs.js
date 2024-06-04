@@ -30,4 +30,14 @@ const create = async (newObject) => {
   }
 };
 
-export default { getAll, create, setToken };
+const update = async (newObject) => {
+  try {
+    const response = await axios.put(`${baseUrl}/${newObject.id}`, newObject);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export default { getAll, create, setToken, update };

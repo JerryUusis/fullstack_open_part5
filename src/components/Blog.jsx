@@ -1,7 +1,10 @@
+import { useState } from "react";
 import Togglable from "./Togglable";
 import { useRef } from "react";
+import blogService from "../services/blogs";
 
 const Blog = ({ blog }) => {
+  const [blogLikes, setBlogLikes] = useState(blog.likes);
   const blogRef = useRef();
   const blogStyle = {
     paddingTop: 10,
@@ -10,13 +13,31 @@ const Blog = ({ blog }) => {
     borderWidth: 1,
     marginBottom: 5,
   };
+
+  const handleUpdate = async () => {
+    try {
+      const updatedBlog = {
+        id: blog.id,
+        user: blog.user.id,
+        likes: blog.likes + 1,
+        author: blog.author,
+        title: blog.title,
+        url: blog.url,
+      };
+      await blogService.update(updatedBlog);
+      setBlogLikes(updatedBlog.likes);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div style={blogStyle}>
       {blog.title}
       <Togglable openLabel="view" closeLabel="hide" ref={blogRef}>
         <p>{blog.url}</p>
         <div>
-          likes {blog.likes} <button>like</button>
+          likes {blogLikes} <button onClick={handleUpdate}>like</button>
         </div>
         <p>{blog.author}</p>
       </Togglable>
