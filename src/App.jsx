@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import BlogForm from "./components/BlogForm";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
-import Login from "./components/LoginForm";
+import LoginForm from "./components/LoginForm";
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -93,7 +94,7 @@ const App = () => {
       <>
         <h2>Log in to application</h2>
         <Notification errorMessage={errorMessage} severity={severity} />
-        <Login
+        <LoginForm
           username={username}
           password={password}
           handleLogin={handleLogin}
@@ -115,17 +116,17 @@ const App = () => {
           {user.username} logged in
           <button onClick={() => handleLogout()}>Logout</button>
         </div>
-
-        <BlogForm
-          title={title}
-          handleTitleChange={({ target }) => setTitle(target.value)}
-          author={author}
-          handleAuthorChange={({ target }) => setAuthor(target.value)}
-          url={url}
-          handleUrlChange={({ target }) => setUrl(target.value)}
-          handleNewBlog={handleNewBlog}
-          blogs={blogs}
-        />
+        <Togglable buttonLabel="new note">
+          <BlogForm
+            title={title}
+            handleTitleChange={({ target }) => setTitle(target.value)}
+            author={author}
+            handleAuthorChange={({ target }) => setAuthor(target.value)}
+            url={url}
+            handleUrlChange={({ target }) => setUrl(target.value)}
+            handleNewBlog={handleNewBlog}
+          />
+        </Togglable>
         <div>
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
