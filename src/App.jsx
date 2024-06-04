@@ -9,8 +9,6 @@ import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [severity, setSeverity] = useState();
@@ -47,15 +45,12 @@ const App = () => {
     }, 3000);
   }, [errorMessage]);
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
+  const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login({ username, password });
       blogService.setToken(user.token);
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       setUser(user);
-      setUsername("");
-      setPassword("");
     } catch (error) {
       handleNotification("Login failed", "error");
       console.error(error);
@@ -67,16 +62,28 @@ const App = () => {
     setSeverity(severity);
   };
 
-  const handleNewBlog = async (title, author, url) => {
+  const handleNewBlog = async (newBlog) => {
     try {
       blogFormRef.current.toggleVisibility();
-      const newBlog = { title, author, url };
       await blogService.create(newBlog);
-      handleNotification(`a new blog ${title} added succesfully`, "success");
-      setBlogs(blogs.concat(newBlog));
+      handleNotification(
+        `a new blog ${newBlog.title} added succesfully`,
+        "success"
+      );
+      await fetchData();
     } catch (error) {
       console.error(error);
       handleNotification("Adding new blog failed", "error");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await blogService.deleteBlog(id);
+      const filteredBlogs = blogs.filter((blog) => blog.id !== id);
+      setBlogs(filteredBlogs);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -90,13 +97,7 @@ const App = () => {
       <>
         <h2>Log in to application</h2>
         <Notification errorMessage={errorMessage} severity={severity} />
-        <LoginForm
-          username={username}
-          password={password}
-          handleLogin={handleLogin}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
-        />
+        <LoginForm handleLogin={handleLogin} />
       </>
     );
   }
@@ -110,17 +111,22 @@ const App = () => {
         </div>
         <div>
           {user.username} logged in
-          <button onClick={() => handleLogout()}>Logout</button>
+          <button onClick={handleLogout}>Logout</button>
         </div>
         <Togglable openLabel="new note" closeLabel="cancel" ref={blogFormRef}>
           <BlogForm handleNewBlog={handleNewBlog} />
         </Togglable>
         <div>
           {blogs
-          // Sort in descending order
+            // Sort in descending order
             .sort((a, b) => b.likes - a.likes)
             .map((blog) => (
-              <Blog key={blog.id} blog={blog} />
+              <Blog
+                key={blog.id}
+                blog={blog}
+                handleDelete={handleDelete}
+                currentUser={user.username}
+              />
             ))}
         </div>
       </div>

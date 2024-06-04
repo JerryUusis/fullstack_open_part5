@@ -3,7 +3,7 @@ import Togglable from "./Togglable";
 import { useRef } from "react";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleDelete, currentUser }) => {
   const [blogLikes, setBlogLikes] = useState(blog.likes);
   const blogRef = useRef();
   const blogStyle = {
@@ -32,6 +32,16 @@ const Blog = ({ blog }) => {
     }
   };
 
+  const openConfirm = () => {
+    if (
+      window.confirm(
+        `Are you sure you want to remove ${blog.title} by ${blog.author}?`
+      )
+    ) {
+      handleDelete(blog.id);
+    }
+  };
+
   return (
     <div style={blogStyle}>
       {blog.title}
@@ -41,6 +51,11 @@ const Blog = ({ blog }) => {
           likes {blogLikes} <button onClick={handleUpdate}>like</button>
         </div>
         <p>{blog.author}</p>
+        {currentUser === blog.user.username ? (
+          <button style={{ display: "block" }} onClick={openConfirm}>
+            remove
+          </button>
+        ) : null}
       </Togglable>
     </div>
   );
