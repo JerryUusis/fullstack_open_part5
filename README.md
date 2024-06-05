@@ -15,3 +15,6 @@
 - 5.10 blogilistan frontend, step10 ✅
 - 5.11 blogilistan frontend, step11 ✅
 - 5.12 blogilistan frontend, step12 ✅
+
+## [Exercises 5.13-5.16](https://fullstackopen.com/osa5/react_sovellusten_testaaminen#tehtavat-5-13-5-16)
+- 5.13: blogilistan testit, step1 ✅
