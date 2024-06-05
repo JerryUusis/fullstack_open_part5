@@ -27,9 +27,9 @@ const Togglable = forwardRef((props, ref) => {
 
   return (
     <>
-      <div style={hideWhenVisible}>
+      <div style={hideWhenVisible} data-testid="visible-content">
         <button onClick={toggleVisibility}>
-          {!visible ? props.openLabel : props.closeLabel}
+          {props.openLabel}
         </button>
       </div>
       <div style={showWhenVisible} data-testid="togglable-content">
