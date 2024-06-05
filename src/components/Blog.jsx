@@ -52,7 +52,7 @@ const Blog = ({ blog, handleDelete, currentUser }) => {
   return (
     <div style={blogStyle} data-testid="blog">
       {blog.title}
-      <Togglable openLabel="view" closeLabel="hide" ref={blogRef}>
+      <Togglable openLabel="view" closeLabel="hide" ref={blogRef} >
         <p>{blog.url}</p>
         <div>
           likes {blogLikes} <button onClick={handleUpdate}>like</button>

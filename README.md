@@ -18,3 +18,4 @@
 
 ## [Exercises 5.13-5.16](https://fullstackopen.com/osa5/react_sovellusten_testaaminen#tehtavat-5-13-5-16)
 - 5.13: blogilistan testit, step1 ✅
+- 5.14: blogilistan testit, step2 ✅
