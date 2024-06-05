@@ -20,3 +20,4 @@
 - 5.13: blogilistan testit, step1 ✅
 - 5.14: blogilistan testit, step2 ✅
 - 5.15: blogilistan testit, step3 ✅
+- 5.16: blogilistan testit, step4 ✅

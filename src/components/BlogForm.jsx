@@ -20,7 +20,7 @@ const BlogForm = ({ handleNewBlog }) => {
   };
 
   return (
-    <div>
+    <div data-testid="blog-form">
       <form onSubmit={addBlog}>
         <div>
           title:
@@ -29,6 +29,7 @@ const BlogForm = ({ handleNewBlog }) => {
             name="Title"
             value={title}
             onChange={(event) => setTitle(event.target.value)}
+            data-testid="title-input"
           />
         </div>
         <div>
@@ -38,6 +39,7 @@ const BlogForm = ({ handleNewBlog }) => {
             name="Author"
             value={author}
             onChange={(event) => setAuthor(event.target.value)}
+            data-testid="author-input"
           />
         </div>
         <div>
@@ -47,6 +49,7 @@ const BlogForm = ({ handleNewBlog }) => {
             name="url"
             value={url}
             onChange={(event) => setUrl(event.target.value)}
+            data-testid="url-input"
           />
         </div>
         <button type="submit">create</button>
