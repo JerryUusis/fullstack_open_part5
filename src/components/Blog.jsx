@@ -1,10 +1,9 @@
 import { useState } from "react";
 import Togglable from "./Togglable";
 import { useRef } from "react";
-import blogService from "../services/blogs";
 import PropTypes from "prop-types";
 
-const Blog = ({ blog, handleDelete, currentUser }) => {
+const Blog = ({ blog, handleDelete, currentUser, handleUpdate }) => {
   const [blogLikes, setBlogLikes] = useState(blog.likes);
   const blogRef = useRef();
   const blogStyle = {
@@ -21,7 +20,7 @@ const Blog = ({ blog, handleDelete, currentUser }) => {
     currentUser: PropTypes.string.isRequired
   };
 
-  const handleUpdate = async () => {
+  const updateBlog = async () => {
     try {
       const newLikes = blogLikes + 1;
       const updatedBlog = {
@@ -32,7 +31,7 @@ const Blog = ({ blog, handleDelete, currentUser }) => {
         title: blog.title,
         url: blog.url,
       };
-      await blogService.update(updatedBlog);
+      handleUpdate(updatedBlog);
       setBlogLikes(newLikes);
     } catch (error) {
       console.error(error);
@@ -55,7 +54,7 @@ const Blog = ({ blog, handleDelete, currentUser }) => {
       <Togglable openLabel="view" closeLabel="hide" ref={blogRef} >
         <p>{blog.url}</p>
         <div>
-          likes {blogLikes} <button onClick={handleUpdate}>like</button>
+          likes {blogLikes} <button onClick={updateBlog} data-testid="like-button">like</button>
         </div>
         <p>{blog.author}</p>
         {currentUser === blog.user.username ? (

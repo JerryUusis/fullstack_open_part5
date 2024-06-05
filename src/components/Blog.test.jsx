@@ -14,8 +14,9 @@ describe("<Blog />", () => {
     }
   };
   const handleDelete = vi.fn();
+  const handleUpdate = vi.fn();
   const currentUser = "tester";
-  const blogElement = <Blog blog={blog} handleDelete={handleDelete} currentUser={currentUser}/>;
+  const blogElement = <Blog blog={blog} handleDelete={handleDelete} handleUpdate={handleUpdate} currentUser={currentUser}/>;
 
   test("renders blog title", () => {
     render(blogElement);
@@ -23,7 +24,7 @@ describe("<Blog />", () => {
     const element = screen.getByTestId("blog");
     expect(element).toHaveTextContent(blog.title);
   });
-  test("shows url, likes and user after pressing 'view' button",async () => {
+  test("shows url, likes and user after pressing 'view' button", async () => {
     render(blogElement);
 
     const user = userEvent.setup();
@@ -34,5 +35,18 @@ describe("<Blog />", () => {
     expect(togglable).toHaveTextContent(blog.url);
     expect(togglable).toHaveTextContent(`likes ${blog.likes}`);
     expect(togglable).toHaveTextContent(blog.author);
+  });
+  test("clicking like button twice", async () => {
+    render(blogElement);
+
+    const user = userEvent.setup();
+    const viewButton = screen.getByText("view");
+    await user.click(viewButton);
+
+    const likeButton = screen.getByTestId("like-button");
+    await user.click(likeButton);
+    await user.click(likeButton);
+
+    expect(handleUpdate).toHaveBeenCalled(2);
   });
 });

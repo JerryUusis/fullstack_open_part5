@@ -87,6 +87,15 @@ const App = () => {
     }
   };
 
+  const handleUpdate = async (updatedBlog) => {
+    try {
+      await blogService.update(updatedBlog);
+    }
+    catch(error) {
+      console.error(error);
+    }
+  };
+
   const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem("loggedBlogappUser");
@@ -125,6 +134,7 @@ const App = () => {
                 key={blog.id}
                 blog={blog}
                 handleDelete={handleDelete}
+                handleUpdate={handleUpdate}
                 currentUser={user.username}
               />
             ))}
