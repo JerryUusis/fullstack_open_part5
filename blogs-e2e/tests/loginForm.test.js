@@ -58,5 +58,21 @@ describe('Blog app', () => {
             await expect(newBlog).toBeVisible();
             await expect(blogTitle).toBeVisible();
         })
+        test("new blog can be liked", async ({ page }) => {
+            await createBlog(page, "test title", "test author", "www.testurl.com");
+            const submitButton = await page.getByText("create");
+            await submitButton.click();
+
+            const viewButton = await page.getByText("view");
+            await viewButton.click();
+
+            const likeButton = await page.getByTestId("like-button");
+            await likeButton.click();
+
+            const likesDiv = await page.getByTestId("likes-div");
+            const likes = await page.getByTestId("likes");
+            expect(likesDiv).toBeVisible()
+            expect(likes).toHaveText("1");
+        })
     })
 })

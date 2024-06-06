@@ -53,8 +53,8 @@ const Blog = ({ blog, handleDelete, currentUser, handleUpdate }) => {
       <span data-testid="blog-title">{blog.title}</span>
       <Togglable openLabel="view" closeLabel="hide" ref={blogRef} >
         <p>{blog.url}</p>
-        <div>
-          likes {blogLikes} <button onClick={updateBlog} data-testid="like-button">like</button>
+        <div data-testid="likes-div">
+          likes <span data-testid="likes">{blogLikes}</span> <button onClick={updateBlog} data-testid="like-button">like</button>
         </div>
         <p>{blog.author}</p>
         {currentUser === blog.user.username ? (
