@@ -115,7 +115,7 @@ const App = () => {
     return (
       <div>
         <div>
-          <h2>blogs</h2>
+          <h2 data-testid="blogs-header">blogs</h2>
           <Notification errorMessage={errorMessage} severity={severity} />
         </div>
         <div>

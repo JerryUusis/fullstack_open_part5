@@ -21,6 +21,7 @@ const Notification = ({ errorMessage, severity }) => {
         borderColor: severity === "success" ? "green" : "red",
         background: "lightGray",
       }}
+      data-testid="notification"
     >
       <p>{errorMessage}</p>
     </div>

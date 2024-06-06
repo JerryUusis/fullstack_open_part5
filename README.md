@@ -24,3 +24,4 @@
 
 ## [Exercises 5.17-5.23](https://fullstackopen.com/osa5/end_to_end_testaus_playwright#tehtavat-5-17-5-23)
 - 5.17: blogilistan end to end ‑testit, step1 ✅
+- 5.18: blogilistan end to end ‑testit, step2 ✅
