@@ -21,3 +21,6 @@
 - 5.14: blogilistan testit, step2 ✅
 - 5.15: blogilistan testit, step3 ✅
 - 5.16: blogilistan testit, step4 ✅
+
+## [Exercises 5.17-5.23](https://fullstackopen.com/osa5/end_to_end_testaus_playwright#tehtavat-5-17-5-23)
+- 5.17: blogilistan end to end ‑testit, step1 ✅
