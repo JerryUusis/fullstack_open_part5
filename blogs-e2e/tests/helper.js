@@ -7,4 +7,14 @@ const loginWith = async (page, username, password) => {
     await submitButton.click();
 }
 
-module.exports = { loginWith }
+const createBlog = async (page, title, author, text) => {
+    const titleInput = await page.getByTestId("title-input");
+    const authorInput = await page.getByTestId("author-input");
+    const urlInput = await page.getByTestId("url-input");
+
+    await titleInput.fill(title);
+    await authorInput.fill(author);
+    await urlInput.fill(text);
+}
+
+module.exports = { loginWith, createBlog }

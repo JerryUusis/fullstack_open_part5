@@ -50,7 +50,7 @@ const Blog = ({ blog, handleDelete, currentUser, handleUpdate }) => {
 
   return (
     <div style={blogStyle} data-testid="blog">
-      {blog.title}
+      <span data-testid="blog-title">{blog.title}</span>
       <Togglable openLabel="view" closeLabel="hide" ref={blogRef} >
         <p>{blog.url}</p>
         <div>

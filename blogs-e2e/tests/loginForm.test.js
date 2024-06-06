@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test');
-const { loginWith } = require("./helper");
+const { loginWith, createBlog } = require("./helper");
 
 describe('Blog app', () => {
     beforeEach(async ({ page, request }) => {
@@ -28,7 +28,7 @@ describe('Blog app', () => {
         test("succeeds with correct credentials", async ({ page }) => {
             await loginWith(page, "mluukkai", "salainen");
             await expect(page.getByText("mluukkai logged in")).toBeVisible();
-            await expect(page.getByText("new note")).toBeVisible();
+            await expect(page.getByText("new blog")).toBeVisible();
         })
         test("fails with incorrect credentials", async ({ page }) => {
             await loginWith(page, "wrong", "credentials");
@@ -36,6 +36,27 @@ describe('Blog app', () => {
             await expect(notification).toBeVisible()
             await expect(notification).toHaveText("Login failed");
             await expect(notification).toHaveCSS("border", "2px solid rgb(255, 0, 0)");
+        })
+    })
+    describe("When logged in", () => {
+        beforeEach(async ({ page }) => {
+            await loginWith(page, "mluukkai", "salainen");
+            const button = await page.getByText("new blog");
+            await button.click()
+        })
+        test("new blog can be created", async ({ page }) => {
+            await createBlog(page, "test title", "test author", "www.testurl.com");
+            const submitButton = await page.getByText("create");
+            await submitButton.click();
+
+            const notification = await page.getByTestId("notification");
+            const newBlog = await page.getByTestId("blog");
+            const blogTitle = await page.getByTestId("blog-title");
+
+            await expect(notification).toBeVisible();
+            await expect(notification).toHaveCSS("border", "2px solid rgb(0, 128, 0)");
+            await expect(newBlog).toBeVisible();
+            await expect(blogTitle).toBeVisible();
         })
     })
 })
