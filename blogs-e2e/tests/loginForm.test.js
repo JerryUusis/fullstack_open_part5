@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test');
-const { loginWith, createBlog } = require("./helper");
+const { loginWith, createBlog, createInitialBlogs } = require("./helper");
 
 describe('Blog app', () => {
     beforeEach(async ({ page, request }) => {
@@ -11,6 +11,7 @@ describe('Blog app', () => {
                 password: 'salainen'
             }
         })
+        await createInitialBlogs(request);
         await page.goto('/')
     })
 
@@ -38,40 +39,44 @@ describe('Blog app', () => {
             await expect(notification).toHaveCSS("border", "2px solid rgb(255, 0, 0)");
         })
     })
-    describe("When logged in", () => {
+    describe("When logged in with initial blogs", () => {
         beforeEach(async ({ page }) => {
             await loginWith(page, "mluukkai", "salainen");
             const button = await page.getByText("new blog");
             await button.click()
         })
+        test("initial blog is visible", async ({ page }) => {
+            const initialBlog = await page.getByText("initial blog");
+            const loggedInUser = await page.getByText("mluukkai logged in")
+            await expect(loggedInUser).toBeVisible()
+            await expect(initialBlog).toBeVisible();
+        })
         test("new blog can be created", async ({ page }) => {
-            await createBlog(page, "test title", "test author", "www.testurl.com");
-            const submitButton = await page.getByText("create");
-            await submitButton.click();
+            await createBlog(page, "new title", "new author", "www.newblog.com");
+            const initialBlog = await page.getByTestId("blog-0");
 
             const notification = await page.getByTestId("notification");
-            const newBlog = await page.getByTestId("blog");
-            const blogTitle = await page.getByTestId("blog-title");
+            const newBlog = await page.getByTestId("blog-1");
+            const newBlogTitle = await page.getByTestId("blog-1-title");
 
             await expect(notification).toBeVisible();
             await expect(notification).toHaveCSS("border", "2px solid rgb(0, 128, 0)");
+            await expect(initialBlog).toBeVisible();
             await expect(newBlog).toBeVisible();
-            await expect(blogTitle).toBeVisible();
+            await expect(newBlogTitle).toHaveText("new title");
         })
         test("new blog can be liked", async ({ page }) => {
-            await createBlog(page, "test title", "test author", "www.testurl.com");
-            const submitButton = await page.getByText("create");
-            await submitButton.click();
+            await createBlog(page, "new title", "new author", "www.newblog.com");
+            const newBlog = await page.getByTestId("blog-1");
+            newBlog.waitFor();
 
-            const viewButton = await page.getByText("view");
-            await viewButton.click();
+            const newBlogViewButton = newBlog.locator("button", { hasText: "view" })
+            await newBlogViewButton.click();
 
-            const likeButton = await page.getByTestId("like-button");
-            await likeButton.click();
+            const newBlogLikeButton = await page.getByTestId("blog-1-like-button");
+            await newBlogLikeButton.click();
 
-            const likesDiv = await page.getByTestId("likes-div");
-            const likes = await page.getByTestId("likes");
-            expect(likesDiv).toBeVisible()
+            const likes = await page.getByTestId("blog-1-likes");
             expect(likes).toHaveText("1");
         })
         test("new blog can be deleted", async ({ page }) => {
@@ -81,22 +86,38 @@ describe('Blog app', () => {
                     await dialog.accept();
                 }
             })
-
             await createBlog(page, "test title", "test author", "www.testurl.com");
-            const submitButton = await page.getByText("create");
-            await submitButton.click();
 
-            const newBlog = await page.getByTestId("blog");
+            const newBlog = await page.getByTestId("blog-1");
+            newBlog.waitFor();
 
-            const viewButton = await page.getByText("view");
-            await viewButton.click();
+            const newBlogViewButton = newBlog.locator("button", { hasText: "view" })
+            await newBlogViewButton.click();
 
-            const removeButton = await page.getByText("remove");
-            await removeButton.click();
+            const newBlogRemoveButton = await newBlog.locator("button", { hasText: "remove" });
+            await newBlogRemoveButton.click();
 
             // Wait until newBlog has been removed from the page
             await newBlog.waitFor({ state: "detached" });
             expect(newBlog).not.toBeVisible();
+        })
+        test("logged in user should see remove button only for blogs they added", async ({ page }) => {
+            await createBlog(page, "new title", "new author", "www.newblog.com");
+            const newBlog = await page.getByTestId("blog-1");
+            newBlog.waitFor();
+            const initialBlog = await page.getByTestId("blog-0");
+
+            const initialBlogViewButton = await initialBlog.locator("button", { hasText: "view" });
+            await initialBlogViewButton.click();
+
+            const newBlogViewButton = newBlog.locator("button", { hasText: "view" })
+            await newBlogViewButton.click();
+
+            const initialBlogRemoveButton = await initialBlog.locator("button", { hasText: "remove" });
+            const newBlogRemoveButton = await newBlog.locator("button", { hasText: "remove" });
+
+            await expect(newBlogRemoveButton).toBeVisible();
+            await expect(initialBlogRemoveButton).not.toBeVisible();
         })
     })
 })
