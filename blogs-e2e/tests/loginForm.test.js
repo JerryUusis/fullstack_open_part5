@@ -74,5 +74,29 @@ describe('Blog app', () => {
             expect(likesDiv).toBeVisible()
             expect(likes).toHaveText("1");
         })
+        test("new blog can be deleted", async ({ page }) => {
+            // Will answer "true" to window.confirm query when remove button is clicked
+            page.on("dialog", async dialog => {
+                if (dialog.type() === "confirm") {
+                    await dialog.accept();
+                }
+            })
+
+            await createBlog(page, "test title", "test author", "www.testurl.com");
+            const submitButton = await page.getByText("create");
+            await submitButton.click();
+
+            const newBlog = await page.getByTestId("blog");
+
+            const viewButton = await page.getByText("view");
+            await viewButton.click();
+
+            const removeButton = await page.getByText("remove");
+            await removeButton.click();
+
+            // Wait until newBlog has been removed from the page
+            await newBlog.waitFor({ state: "detached" });
+            expect(newBlog).not.toBeVisible();
+        })
     })
 })
