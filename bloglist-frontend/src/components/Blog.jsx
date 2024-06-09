@@ -3,7 +3,7 @@ import Togglable from "./Togglable";
 import { useRef } from "react";
 import PropTypes from "prop-types";
 
-const Blog = ({ blog, handleDelete, currentUser, handleUpdate, index }) => {
+const Blog = ({ blog, handleDelete, currentUser, handleUpdate }) => {
   const [blogLikes, setBlogLikes] = useState(blog.likes);
   const blogRef = useRef();
   const blogStyle = {
@@ -49,12 +49,12 @@ const Blog = ({ blog, handleDelete, currentUser, handleUpdate, index }) => {
   };
 
   return (
-    <div style={blogStyle} data-testid={`blog-${index}`}>
-      <span data-testid={`blog-${index}-title`}>{blog.title}</span>
+    <div style={blogStyle} data-testid={"blog"}>
+      <span data-testid={"blog-title"}>{blog.title}</span>
       <Togglable openLabel="view" closeLabel="hide" ref={blogRef}>
         <p>{blog.url}</p>
-        <div data-testid={`blog-${index}-likes-div`}>
-          likes <span data-testid={`blog-${index}-likes`}>{blogLikes}</span> <button onClick={updateBlog} data-testid={`blog-${index}-like-button`}>like</button>
+        <div data-testid={"blog-likes-div"}>
+          likes <span data-testid={"blog-likes"}>{blogLikes}</span> <button onClick={updateBlog} data-testid={"blog-like-button"}>like</button>
         </div>
         <p>{blog.author}</p>
         {currentUser === blog.user.username ? (

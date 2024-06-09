@@ -29,3 +29,4 @@
 - 5.20: blogilistan end to end ‑testit, step4 ✅
 - 5.21: blogilistan end to end ‑testit, step5 ✅
 - 5.22: blogilistan end to end ‑testit, step6 ✅
+- 5.23: blogilistan end to end ‑testit, step7 ✅

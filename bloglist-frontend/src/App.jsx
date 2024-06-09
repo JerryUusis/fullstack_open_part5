@@ -122,21 +122,20 @@ const App = () => {
           {user.username} logged in
           <button onClick={handleLogout}>Logout</button>
         </div>
-        <Togglable openLabel="new blog" closeLabel="cancel" ref={blogFormRef}>
+        <Togglable data-testid="blog-form-togglable" openLabel="new blog" closeLabel="cancel" ref={blogFormRef}>
           <BlogForm handleNewBlog={handleNewBlog} />
         </Togglable>
         <div data-testid="blog-list">
           {blogs
             // Sort in descending order
             .sort((a, b) => b.likes - a.likes)
-            .map((blog, index) => (
+            .map((blog) => (
               <Blog
                 key={blog.id}
                 blog={blog}
                 handleDelete={handleDelete}
                 handleUpdate={handleUpdate}
                 currentUser={user.username}
-                index={index}
               />
             ))}
         </div>
